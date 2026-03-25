@@ -1,0 +1,12 @@
+npm run dev -- --host
+
+npx localtunnel --port 5173
+
+
+npx vite optimize --force
+npm run dev -- --host
+
+154.125.81.7
+
+
+Yassa@guinar1234nigga

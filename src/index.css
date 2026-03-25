@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+  --color-school-blue: #1a5276;
+}
+
+/* Fixation du Thème Global */
+body {
+  @apply bg-[#f8fafc] text-slate-900 transition-colors duration-500 font-sans min-h-screen antialiased overflow-x-hidden;
+}
+
+.dark body {
+  @apply bg-[#020617] text-white;
+}
+
+/* Centrage Global */
+.page-container {
+  @apply w-full max-w-6xl mx-auto flex flex-col items-center py-10 px-6;
+}
+
+/* Barre de défilement discrète */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { @apply bg-slate-300 dark:bg-slate-800 rounded-full; }
