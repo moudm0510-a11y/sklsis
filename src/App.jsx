@@ -8,6 +8,7 @@ import AdminPanel from './pages/AdminPanel';
 import SuperAdmin from './pages/SuperAdmin';
 import CahierDeTexte from './pages/CahierDeTexte';
 import Calendar from './pages/Calendar';
+import Onboarding from './components/Onboarding';
 
 export default function App() {
   const [user, setUser] = useState(null);
