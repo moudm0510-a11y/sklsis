@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -32,36 +33,44 @@ export default function App() {
 
   const handleLogout = () => { setUser(null); setActiveTab('home'); };
 
-  if (!user) return <Login onLoginSuccess={handleLoginSuccess} />;
+  if (!user) return (
+    <>
+      <Login onLoginSuccess={handleLoginSuccess} />
+      <Analytics />
+    </>
+  );
 
   return (
-    <Layout 
-      user={user} 
-      activeTab={activeTab} 
-      setActiveTab={setActiveTab} 
-      isDarkMode={isDarkMode} 
-      setIsDarkMode={setIsDarkMode}
-      onLogout={handleLogout}
-    >
-      <div className="page-container animate-in">
-        {/* SÉCURITÉ : On ne rend le composant QUE si le rôle a le droit */}
-        
-        {/* Tout le monde sauf Super Admin accède à ces onglets */}
-        {user.role !== 'super_admin' && (
-          <>
-            {activeTab === 'home' && <Dashboard user={user} />}
-            {activeTab === 'schedule' && <Schedule />}
-            {activeTab === 'grades' && <Grades user={user} />}
-            {activeTab === 'notebook' && <CahierDeTexte user={user} />}
-          </>
-        )}
+    <>
+      <Layout 
+        user={user} 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        isDarkMode={isDarkMode} 
+        setIsDarkMode={setIsDarkMode}
+        onLogout={handleLogout}
+      >
+        <div className="page-container animate-in">
+          {/* SÉCURITÉ : On ne rend le composant QUE si le rôle a le droit */}
+          
+          {/* Tout le monde sauf Super Admin accède à ces onglets */}
+          {user.role !== 'super_admin' && (
+            <>
+              {activeTab === 'home' && <Dashboard user={user} />}
+              {activeTab === 'schedule' && <Schedule />}
+              {activeTab === 'grades' && <Grades user={user} />}
+              {activeTab === 'notebook' && <CahierDeTexte user={user} />}
+            </>
+          )}
 
-        {/* Accès Admin École uniquement */}
-        {user.role === 'admin' && activeTab === 'admin' && <AdminPanel user={user} />}
+          {/* Accès Admin École uniquement */}
+          {user.role === 'admin' && activeTab === 'admin' && <AdminPanel user={user} />}
 
-        {/* Accès Super Admin Uniquement */}
-        {user.role === 'super_admin' && activeTab === 'super' && <SuperAdmin />}
-      </div>
-    </Layout>
+          {/* Accès Super Admin Uniquement */}
+          {user.role === 'super_admin' && activeTab === 'super' && <SuperAdmin />}
+        </div>
+      </Layout>
+      <Analytics />
+    </>
   );
 }
