@@ -8,24 +8,24 @@ import AdminPanel from './pages/AdminPanel';
 import SuperAdmin from './pages/SuperAdmin';
 import CahierDeTexte from './pages/CahierDeTexte';
 import Calendar from './pages/Calendar';
-import Onboarding from './components/Onboarding';
 
 export default function App() {
   const [user, setUser] = useState(null);
   const [activeTab, setActiveTab] = useState('home');
   const [isDarkMode, setIsDarkMode] = useState(true);
 
+  // Synchronisation du thème
   useEffect(() => {
-    const root = window.document.documentElement;
-    if (isDarkMode) root.classList.add('dark');
-    else root.classList.remove('dark');
+    if (isDarkMode) document.documentElement.classList.add('dark');
+    else document.documentElement.classList.remove('dark');
   }, [isDarkMode]);
 
+  // ACTION APRÈS CONNEXION RÉUSSIE
   const handleLoginSuccess = (userData) => {
     setUser(userData);
-    // REDIRECTION INTELLIGENTE SELON LE RÔLE
+    // On redirige vers l'onglet le plus important pour chaque rôle
     if (userData.role === 'super_admin') setActiveTab('super');
-    else if (userData.role === 'admin') setActiveTab('admin'); 
+    else if (userData.role === 'admin') setActiveTab('admin');
     else setActiveTab('home');
   };
 
@@ -38,15 +38,15 @@ export default function App() {
       setActiveTab={setActiveTab} 
       isDarkMode={isDarkMode} 
       setIsDarkMode={setIsDarkMode}
-      onLogout={() => setUser(null)}
+      onLogout={() => { setUser(null); setActiveTab('home'); }}
     >
-      <div className="w-full animate-in fade-in duration-500">
+      <div className="w-full max-w-7xl mx-auto flex flex-col items-center">
         {activeTab === 'home' && <Dashboard user={user} />}
         {activeTab === 'schedule' && <Schedule user={user} />}
         {activeTab === 'grades' && <Grades user={user} />}
         {activeTab === 'notebook' && <CahierDeTexte user={user} />}
-        {activeTab === 'admin' && <AdminPanel user={user} />}
-        {activeTab === 'super' && <SuperAdmin />}
+        {activeTab === 'admin' && user.role === 'admin' && <AdminPanel user={user} />}
+        {activeTab === 'super' && user.role === 'super_admin' && <SuperAdmin user={user} />}
         {activeTab === 'calendar' && <Calendar user={user} />}
       </div>
     </Layout>
