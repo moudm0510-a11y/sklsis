@@ -8,8 +8,6 @@ import AdminPanel from './pages/AdminPanel';
 import SuperAdmin from './pages/SuperAdmin';
 import CahierDeTexte from './pages/CahierDeTexte';
 import Calendar from './pages/Calendar';
-import Parents from './pages/Parents';
-import Onboarding from './components/Onboarding';
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -17,7 +15,6 @@ export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(true);
 
   useEffect(() => {
-    document.title = "SKLSIS PRO";
     const root = window.document.documentElement;
     if (isDarkMode) root.classList.add('dark');
     else root.classList.remove('dark');
@@ -25,17 +22,13 @@ export default function App() {
 
   const handleLoginSuccess = (userData) => {
     setUser(userData);
+    // REDIRECTION INTELLIGENTE SELON LE RÔLE
     if (userData.role === 'super_admin') setActiveTab('super');
-    else if (userData.role === 'parent') setActiveTab('parents');
+    else if (userData.role === 'admin') setActiveTab('admin'); 
     else setActiveTab('home');
   };
 
   if (!user) return <Login onLoginSuccess={handleLoginSuccess} />;
-
-  // SYSTÈME DE ONBOARDING (Si premier login activé)
-  if (user.role === 'student' && user.premier_login) {
-    return <Onboarding user={user} onComplete={() => setUser({...user, premier_login: false})} />;
-  }
 
   return (
     <Layout 
@@ -44,9 +37,9 @@ export default function App() {
       setActiveTab={setActiveTab} 
       isDarkMode={isDarkMode} 
       setIsDarkMode={setIsDarkMode}
-      onLogout={() => { setUser(null); setActiveTab('home'); }}
+      onLogout={() => setUser(null)}
     >
-      <div className="w-full animate-fade-in">
+      <div className="w-full animate-in fade-in duration-500">
         {activeTab === 'home' && <Dashboard user={user} />}
         {activeTab === 'schedule' && <Schedule user={user} />}
         {activeTab === 'grades' && <Grades user={user} />}
@@ -54,7 +47,6 @@ export default function App() {
         {activeTab === 'admin' && <AdminPanel user={user} />}
         {activeTab === 'super' && <SuperAdmin />}
         {activeTab === 'calendar' && <Calendar user={user} />}
-        {activeTab === 'parents' && <Parents user={user} />}
       </div>
     </Layout>
   );
