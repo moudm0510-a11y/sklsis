@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+  --color-school-blue: #1a5276;
+  --color-school-green: #27ae60;
+  --color-dark-bg: #020617;
+  --color-light-bg: #f8fafc;
+}
+
+body {
+  @apply transition-colors duration-500 font-sans min-h-screen antialiased overflow-x-hidden m-0 p-0;
+  @apply bg-[var(--color-light-bg)] text-slate-900;
+}
+
+.dark body {
+  @apply bg-[var(--color-dark-bg)] text-white;
+}
+
+/* Scrollbar Style */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-thumb { @apply bg-blue-600 rounded-full; }
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
